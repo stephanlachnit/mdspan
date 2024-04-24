@@ -25,6 +25,8 @@ Features in Addition To C++ Standard
 - C++14 backport (e.g., fold expressions not required)
   - Compile times of this backport will be substantially slower than the C++17 version
 - Macros to enable, e.g., `__device__` marking of all functions for CUDA compatibility
+* Non-standard extensions for device code compatibility
+  * These extension methods can be invoked by passing `Kokkos::mdspan_non_standard` as the first argument.
 
 Building and Installation
 -------------------------
