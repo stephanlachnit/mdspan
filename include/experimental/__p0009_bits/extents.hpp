@@ -22,6 +22,7 @@
 #endif
 #include <array>
 
+#include <cassert>
 #include <cinttypes>
 
 namespace MDSPAN_IMPL_STANDARD_NAMESPACE {
@@ -614,5 +615,75 @@ static
 #endif
 constexpr bool __is_extents_v = __is_extents<T>::value;
 
+template<class InputIndexType, class ExtentsIndexType>
+MDSPAN_INLINE_FUNCTION
+constexpr void
+check_lower_bound(InputIndexType user_index,
+                  ExtentsIndexType /* current_extent */,
+                  std::true_type /* is_signed */)
+{
+  (void) user_index; // prevent unused variable warning
+#ifdef _MDSPAN_DEBUG
+  assert(static_cast<ExtentsIndexType>(user_index) >= 0);
+#endif
+}
+
+template<class InputIndexType, class ExtentsIndexType>
+MDSPAN_INLINE_FUNCTION
+constexpr void
+check_lower_bound(InputIndexType /* user_index */,
+                  ExtentsIndexType /* current_extent */,
+                  std::false_type /* is_signed */)
+{}
+
+template<class InputIndexType, class ExtentsIndexType>
+MDSPAN_INLINE_FUNCTION
+constexpr void
+check_upper_bound(InputIndexType user_index,
+                  ExtentsIndexType current_extent)
+{
+  (void) user_index; // prevent unused variable warnings
+  (void) current_extent;
+#ifdef _MDSPAN_DEBUG
+  assert(static_cast<ExtentsIndexType>(user_index) < current_extent);
+#endif
+}
+
+template<class InputIndex, class ExtentsIndexType>
+MDSPAN_INLINE_FUNCTION
+constexpr void
+check_one_index(InputIndex user_index,
+                ExtentsIndexType current_extent)
+{
+  check_lower_bound(user_index, current_extent,
+    std::integral_constant<bool, std::is_signed_v<ExtentsIndexType>>{});
+  check_upper_bound(user_index, current_extent);
+}
+ 
+template<size_t ... RankIndices,
+         class ExtentsIndexType, size_t ... Exts,
+         class ... Indices>
+MDSPAN_INLINE_FUNCTION
+constexpr void
+check_all_indices_helper(std::index_sequence<RankIndices...>,
+                         const extents<ExtentsIndexType, Exts...>& exts,
+                         Indices... indices)
+{
+  _MDSPAN_FOLD_COMMA(
+    (check_one_index(indices, exts.extent(RankIndices)))
+  );
+}
+
+template<class ExtentsIndexType, size_t ... Exts,
+         class ... Indices>
+MDSPAN_INLINE_FUNCTION
+constexpr void
+check_all_indices(const extents<ExtentsIndexType, Exts...>& exts,
+                  Indices... indices)
+{
+  check_all_indices_helper(std::make_index_sequence<sizeof...(Indices)>(),
+                           exts, indices...);
+}
+  
 } // namespace detail
 } // namespace MDSPAN_IMPL_STANDARD_NAMESPACE
