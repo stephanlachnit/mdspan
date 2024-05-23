@@ -60,15 +60,17 @@ void test_padding_stride(const Extents &extents, const TestExtents &test_extents
     ASSERT_EQ(mapping.padded_stride.value(0), 0);
   }
 
-  auto strs = mapping.strides();
   size_t prod = 1;
-  for (typename decltype(mapping)::rank_type rrev = 0; rrev < TestExtents::rank(); ++rrev)
-  {
-    auto r = TestExtents::rank() - 1 - rrev;
-    ASSERT_EQ(strs[r], prod);
-    prod *= test_extents.extent(r);
+  // get rid of NVCC warning "pointless comparison of unsigned integer with zero"
+  if constexpr (TestExtents::rank() > 0) {
+    auto strs = mapping.strides();
+    for (typename decltype(mapping)::rank_type rrev = 0; rrev < TestExtents::rank(); ++rrev)
+    {
+      auto r = TestExtents::rank() - 1 - rrev;
+      ASSERT_EQ(strs[r], prod);
+      prod *= test_extents.extent(r);
+    }
   }
-
   ASSERT_EQ(prod, mapping.required_span_size());
 }
 
@@ -82,15 +84,17 @@ void test_padding_stride(const Extents &extents, const TestExtents &test_extents
     ASSERT_EQ(mapping.padded_stride.value(0), 0);
   }
 
-  auto strs = mapping.strides();
   size_t prod = 1;
-  for (typename decltype(mapping)::rank_type rrev = 0; rrev < TestExtents::rank(); ++rrev)
-  {
-    auto r = TestExtents::rank() - 1 - rrev;
-    ASSERT_EQ(strs[r], prod);
-    prod *= test_extents.extent(r);
+  // get rid of NVCC warning "pointless comparison of unsigned integer with zero"
+  if constexpr (TestExtents::rank() > 0) {
+    auto strs = mapping.strides();
+    for (typename decltype(mapping)::rank_type rrev = 0; rrev < TestExtents::rank(); ++rrev)
+    {
+      auto r = TestExtents::rank() - 1 - rrev;
+      ASSERT_EQ(strs[r], prod);
+      prod *= test_extents.extent(r);
+    }
   }
-
   ASSERT_EQ(prod, mapping.required_span_size());
 }
 

@@ -276,6 +276,7 @@ TYPED_TEST(TestSubMDSpan, submdspan_return_type) {
   __MDSPAN_TESTS_RUN_TEST(TestFixture::run());
 }
 
+#ifdef _MDSPAN_USE_CLASS_TEMPLATE_ARGUMENT_DEDUCTION
 TEST(TestSubmdspanIssue4060, Rank1) {
   auto x = std::array<int, 3>{};
   auto A = Kokkos::mdspan{x.data(), Kokkos::extents{3}};
@@ -350,3 +351,4 @@ TEST(TestSubmdspanIssue4060, Rank2_one) {
     test_submdspan_issue4060_rank2_one(mapping_type{exts, strides});
   }
 }
+#endif

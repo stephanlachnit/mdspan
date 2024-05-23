@@ -59,6 +59,10 @@ MDSPAN_INLINE_FUNCTION constexpr size_t get_actual_static_padding_value() {
   } else {
     return dynamic_extent;
   }
+  // Missing return statement warning from NVCC
+#ifdef __NVCC__
+  return 0;
+#endif
 }
 
 template <size_t _PaddingValue, typename _Extents, size_t _ExtentToPadIdx, size_t _Rank, typename Enabled = void>
@@ -101,6 +105,10 @@ struct padded_extent {
     } else {
       return init_padding(exts, padding_value);
     }
+  // Missing return statement warning from NVCC
+#ifdef __NVCC__
+  return {};
+#endif
   }
 
   MDSPAN_INLINE_FUNCTION static constexpr static_array_type
@@ -112,6 +120,10 @@ struct padded_extent {
     } else {
       return {};
     }
+  // Missing return statement warning from NVCC
+#ifdef __NVCC__
+  return {};
+#endif
   }
 
   template <typename _Mapping, size_t _PaddingStrideIdx>
@@ -123,6 +135,10 @@ struct padded_extent {
     } else {
       return {};
     }
+  // Missing return statement warning from NVCC
+#ifdef __NVCC__
+  return {};
+#endif
   }
 };
 } // namespace detail

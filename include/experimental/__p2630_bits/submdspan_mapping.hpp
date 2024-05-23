@@ -43,7 +43,8 @@ MDSPAN_INLINE_FUNCTION
 constexpr bool
 one_slice_out_of_bounds(const IndexType& extent, const Slice& slice)
 {
-  return detail::first_of(slice) == extent;
+  using common_t = std::common_type_t<decltype(detail::first_of(slice)), IndexType>;
+  return static_cast<common_t>(detail::first_of(slice)) == static_cast<common_t>(extent);
 }
 
 template<size_t ... RankIndices,
@@ -176,7 +177,8 @@ layout_left::mapping<Extents>::submdspan_mapping_impl(SliceSpecifiers... slices)
                                    *this, inv_map,
     // HIP needs deduction guides to have markups so we need to be explicit
     // NVCC 11.0 has a bug with deduction guide here, tested that 11.2 does not have the issue
-    #if defined(_MDSPAN_HAS_HIP) || (defined(__NVCC__) && (__CUDACC_VER_MAJOR__ * 100 + __CUDACC_VER_MINOR__ * 10) < 1120)
+    // But Clang-CUDA also doesn't accept the use of deduction guide so disable it for CUDA alltogether
+    #if defined(_MDSPAN_HAS_HIP) || defined(_MDSPAN_HAS_CUDA)
                                    std::tuple<decltype(detail::stride_of(slices))...>{detail::stride_of(slices)...})),
     #else
                                    std::tuple{detail::stride_of(slices)...})),
@@ -291,7 +293,8 @@ layout_right::mapping<Extents>::submdspan_mapping_impl(
                                    *this, inv_map,
     // HIP needs deduction guides to have markups so we need to be explicit
     // NVCC 11.0 has a bug with deduction guide here, tested that 11.2 does not have the issue
-    #if defined(_MDSPAN_HAS_HIP) || (defined(__NVCC__) && (__CUDACC_VER_MAJOR__ * 100 + __CUDACC_VER_MINOR__ * 10) < 1120)
+    // But Clang-CUDA also doesn't accept the use of deduction guide so disable it for CUDA alltogether
+    #if defined(_MDSPAN_HAS_HIP) || defined(_MDSPAN_HAS_CUDA)
                                    std::tuple<decltype(detail::stride_of(slices))...>{detail::stride_of(slices)...})),
     #else
                                    std::tuple{detail::stride_of(slices)...})),
