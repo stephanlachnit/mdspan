@@ -16,11 +16,13 @@
 
 #pragma once
 #include "dynamic_extent.hpp"
+#include "utility.hpp"
 
 #ifdef __cpp_lib_span
 #include <span>
 #endif
 #include <array>
+#include <type_traits>
 
 #include <cassert>
 #include <cinttypes>
@@ -60,8 +62,8 @@ template<class IndexType, class ... Arguments>
 MDSPAN_INLINE_FUNCTION
 static constexpr bool are_valid_indices() {
     return
-      (std::is_convertible<Arguments, IndexType>::value && ... && true) &&
-      (std::is_nothrow_constructible<IndexType, Arguments>::value && ... && true);
+      _MDSPAN_FOLD_AND(std::is_convertible<Arguments, IndexType>::value) &&
+      _MDSPAN_FOLD_AND(std::is_nothrow_constructible<IndexType, Arguments>::value);
 }
 
 // ------------------------------------------------------------------
@@ -539,14 +541,9 @@ public:
   MDSPAN_INLINE_FUNCTION friend constexpr bool
   operator==(const extents &lhs,
              const extents<OtherIndexType, OtherExtents...> &rhs) noexcept {
-    if constexpr (rank() != extents<OtherIndexType, OtherExtents...>::rank()) {
-      return false;
-    } else {
-      using common_t = std::common_type_t<index_type, OtherIndexType>;
-      for (size_type r = 0; r < m_rank; r++)
-        if(static_cast<common_t>(rhs.extent(r)) != static_cast<common_t>(lhs.extent(r))) return false;
-    }
-    return true;
+    return
+      rank() == extents<OtherIndexType, OtherExtents...>::rank() &&
+      detail::rankwise_equal(detail::with_rank<rank()>{}, rhs, lhs, detail::extent);
   }
 
 #if !(MDSPAN_HAS_CXX_20)
@@ -649,17 +646,21 @@ check_upper_bound(InputIndexType user_index,
 #endif
 }
 
+// Returning true to use AND fold instead of comma
+// CPP14 mode doesn't like the use of void expressions
+// with the way the _MDSPAN_FOLD_AND is set up
 template<class InputIndex, class ExtentsIndexType>
 MDSPAN_INLINE_FUNCTION
-constexpr void
+constexpr bool
 check_one_index(InputIndex user_index,
                 ExtentsIndexType current_extent)
 {
   check_lower_bound(user_index, current_extent,
-    std::integral_constant<bool, std::is_signed_v<ExtentsIndexType>>{});
+    std::integral_constant<bool, std::is_signed<ExtentsIndexType>::value>{});
   check_upper_bound(user_index, current_extent);
+  return true;
 }
- 
+
 template<size_t ... RankIndices,
          class ExtentsIndexType, size_t ... Exts,
          class ... Indices>
@@ -669,7 +670,8 @@ check_all_indices_helper(std::index_sequence<RankIndices...>,
                          const extents<ExtentsIndexType, Exts...>& exts,
                          Indices... indices)
 {
-  _MDSPAN_FOLD_COMMA(
+  // Suppress warning about statement has no effect
+  (void) _MDSPAN_FOLD_AND(
     (check_one_index(indices, exts.extent(RankIndices)))
   );
 }
@@ -684,6 +686,6 @@ check_all_indices(const extents<ExtentsIndexType, Exts...>& exts,
   check_all_indices_helper(std::make_index_sequence<sizeof...(Indices)>(),
                            exts, indices...);
 }
-  
+
 } // namespace detail
 } // namespace MDSPAN_IMPL_STANDARD_NAMESPACE
