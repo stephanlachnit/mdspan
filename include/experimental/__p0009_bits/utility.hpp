@@ -59,4 +59,8 @@ constexpr struct
 } stride;
 
 } // namespace detail
+
+constexpr struct mdspan_non_standard_tag {
+} mdspan_non_standard;
+
 } // namespace MDSPAN_IMPL_STANDARD_NAMESPACE
