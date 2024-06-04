@@ -55,9 +55,10 @@ T dot_product(
   Kokkos::mdspan<T, ExtsB, LayB, AccB> b
 ) //requires ExtsA::rank() == ExtsB::rank() && ExtsA::rank() == 2
 {
+  using int_t = typename ExtsA::index_type;
   T result = 0;
-  for(int i = 0; i < a.extent(0); ++i) {
-    for(int j = 0; j < a.extent(1); ++j) {
+  for(int_t i = 0; i < a.extent(0); ++i) {
+    for(int_t j = 0; j < a.extent(1); ++j) {
 #if MDSPAN_USE_BRACKET_OPERATOR
       result += a[i, j] * b[i, j];
 #else
@@ -78,9 +79,10 @@ void fill_in_order(
   Kokkos::mdspan<T, ExtsA, LayA, AccA> a
 ) // requires ExtsA::rank() == 2
 {
+  using int_t = typename ExtsA::index_type;
   T count = 0;
-  for(int i = 0; i < a.extent(0); ++i) {
-    for(int j = 0; j < a.extent(1); ++j) {
+  for(int_t i = 0; i < a.extent(0); ++i) {
+    for(int_t j = 0; j < a.extent(1); ++j) {
 #if MDSPAN_USE_BRACKET_OPERATOR
       a[i, j] = count++;
 #else
