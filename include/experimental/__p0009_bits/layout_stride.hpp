@@ -651,15 +651,15 @@ constexpr void validate_strides(with_rank<N>, Layout, const Extents& ext, const 
 
   constexpr auto is_left = std::is_same<Layout, layout_left>::value;
 
-  typename Extents::index_type stride = 1;
+  typename Extents::index_type expected_stride = 1;
 
   for (std::size_t r = 0; r < N; r++) {
     const std::size_t s = is_left ? r : N - 1 - r;
 
-    MDSPAN_IMPL_PRECONDITION(common_integral_compare(stride, other.stride(s))
+    MDSPAN_IMPL_PRECONDITION(common_integral_compare(expected_stride, other.stride(s))
                              and "invalid strides for layout_{left,right}");
 
-    stride *= ext.extent(s);
+    expected_stride *= ext.extent(s);
   }
 }
 
