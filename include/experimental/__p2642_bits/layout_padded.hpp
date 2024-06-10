@@ -494,6 +494,17 @@ public:
     return !(left == right);
   }
 #endif
+
+   // [mdspan.submdspan.mapping], submdspan mapping specialization
+   template<class... SliceSpecifiers>
+     constexpr auto submdspan_mapping_impl(
+       SliceSpecifiers... slices) const;
+
+   template<class... SliceSpecifiers>
+     friend constexpr auto submdspan_mapping(
+       const mapping& src, SliceSpecifiers... slices) {
+         return src.submdspan_mapping_impl(slices...);
+     }
 };
 
 template <size_t PaddingValue>
