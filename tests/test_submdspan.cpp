@@ -166,6 +166,7 @@ using submdspan_test_types =
     , std::tuple<Kokkos::layout_left, Kokkos::layout_stride,  Kokkos::extents<size_t,6,4,5,6,7,8>, args_t<6,4,5,6,7,8>, Kokkos::extents<size_t,4,dyn,7>, int, Kokkos::full_extent_t, std::pair<int,int>, int, Kokkos::full_extent_t, int>
     // layout_right to layout_right_padded
     , std::tuple<Kokkos::layout_right, layout_right_padded<dyn>, Kokkos::dextents<size_t,2>,       args_t<10,20>,          Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, std::pair<int,int>>
+    , std::tuple<Kokkos::layout_right, layout_right_padded<20>,  Kokkos::extents<size_t,dyn,20>,   args_t<10,20>,          Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, std::pair<int,int>>
     , std::tuple<Kokkos::layout_right, layout_right_padded<dyn>, Kokkos::dextents<size_t,3>,       args_t<10,20,30>,       Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, int, std::pair<int,int>>
     , std::tuple<Kokkos::layout_right, layout_right_padded<dyn>, Kokkos::dextents<size_t,4>,       args_t<10,20,30,40>,    Kokkos::dextents<size_t,3>, std::pair<int,int>, Kokkos::full_extent_t, int, std::pair<int,int>>
     , std::tuple<Kokkos::layout_right, layout_right_padded<dyn>, Kokkos::dextents<size_t,5>,       args_t<10,20,30,40,50>, Kokkos::dextents<size_t,3>, int, std::pair<int,int>, Kokkos::full_extent_t, int, std::pair<int,int>>
@@ -206,6 +207,34 @@ using submdspan_test_types =
     , std::tuple<layout_left_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,3>, args_t<10,20,30>, Kokkos::dextents<size_t,3>, Kokkos::full_extent_t, Kokkos::strided_slice<int,int,int>, Kokkos::full_extent_t>
     , std::tuple<layout_left_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,3>, args_t<10,20,30>, Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, int, Kokkos::strided_slice<int,int,int>>
     , std::tuple<layout_left_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,4>, args_t<10,20,30,40>, Kokkos::dextents<size_t,3>, Kokkos::full_extent_t, Kokkos::full_extent_t, int, Kokkos::full_extent_t>
+    // layout_right_padded to layout_right
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_right, Kokkos::dextents<size_t,2>, args_t<10,20>, Kokkos::dextents<size_t,0>, int, int>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_right, Kokkos::dextents<size_t,2>, args_t<10,20>, Kokkos::dextents<size_t,1>, int, std::pair<int,int>>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_right, Kokkos::extents<size_t,dyn,30>, args_t<10,20>, Kokkos::extents<size_t,30>, int, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<4>, Kokkos::layout_right, Kokkos::dextents<size_t,3>, args_t<10,20,30>, Kokkos::dextents<size_t,1>, int, int, std::pair<int,int>>
+    , std::tuple<layout_right_padded<4>, Kokkos::layout_right, Kokkos::extents<size_t,dyn,dyn,30>, args_t<10,20,30>, Kokkos::extents<size_t,30>, int, int, Kokkos::full_extent_t>
+    // layout_right_padded to layout_right_padded
+    , std::tuple<layout_right_padded<dyn>, layout_right_padded<dyn>, Kokkos::dextents<size_t,0>,        args_t<>, Kokkos::dextents<size_t,0>>
+    , std::tuple<layout_right_padded<4>,   layout_right_padded<4>,   Kokkos::dextents<size_t,0>,        args_t<>, Kokkos::dextents<size_t,0>>
+    , std::tuple<layout_right_padded<dyn>, layout_right_padded<dyn>, Kokkos::dextents<size_t,2>,        args_t<10,20>, Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<4>,   layout_right_padded<dyn>, Kokkos::dextents<size_t,2>,        args_t<10,20>, Kokkos::dextents<size_t,2>, std::pair<int, int>, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<4>,   layout_right_padded<dyn>, Kokkos::dextents<size_t,2>,        args_t<10,20>, Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, std::pair<int, int>>
+    , std::tuple<layout_right_padded<dyn>, layout_right_padded<dyn>, Kokkos::dextents<size_t,2>,        args_t<10,20>, Kokkos::dextents<size_t,2>, std::pair<int, int>, std::pair<int, int>>
+    , std::tuple<layout_right_padded<22>,  layout_right_padded<22>,  Kokkos::extents<size_t,10,20>,     args_t<10,20>, Kokkos::extents<size_t, 10, dyn>, Kokkos::full_extent_t, std::pair<int, int>>
+    , std::tuple<layout_right_padded<dyn>, layout_right_padded<dyn>, Kokkos::dextents<size_t,3>,        args_t<10,20,30>, Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, int, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<4>,   layout_right_padded<dyn>, Kokkos::dextents<size_t,3>,        args_t<10,20,30>, Kokkos::dextents<size_t,2>, std::pair<int, int>, int, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<4>,   layout_right_padded<dyn>, Kokkos::dextents<size_t,3>,        args_t<10,20,30>, Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, int, std::pair<int, int>>
+    , std::tuple<layout_right_padded<dyn>, layout_right_padded<dyn>, Kokkos::dextents<size_t,3>,        args_t<10,20,30>, Kokkos::dextents<size_t,2>, std::pair<int, int>, int, std::pair<int, int>>
+    , std::tuple<layout_right_padded<32>,  layout_right_padded<640>, Kokkos::extents<size_t,dyn,20,30>, args_t<10,20,30>, Kokkos::extents<size_t, dyn, dyn>, Kokkos::full_extent_t, int, std::pair<int, int>>
+    , std::tuple<layout_right_padded<dyn>, layout_right_padded<dyn>, Kokkos::dextents<size_t,4>,        args_t<10,20,30,40>, Kokkos::dextents<size_t,3>, Kokkos::full_extent_t, Kokkos::full_extent_t, int, Kokkos::full_extent_t>
+    // layout_right_padded to layout_stride
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,1>, args_t<10>, Kokkos::dextents<size_t,1>, Kokkos::strided_slice<int,int,int>>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,2>, args_t<10,20>, Kokkos::dextents<size_t,1>, int, Kokkos::strided_slice<int,int,int>>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,2>, args_t<10,20>, Kokkos::dextents<size_t,2>, Kokkos::strided_slice<int,int,int>, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,2>, args_t<10,20>, Kokkos::dextents<size_t,2>, Kokkos::full_extent_t, Kokkos::strided_slice<int,int,int>>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,3>, args_t<10,20,30>, Kokkos::dextents<size_t,3>, Kokkos::full_extent_t, Kokkos::strided_slice<int,int,int>, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,3>, args_t<10,20,30>, Kokkos::dextents<size_t,2>, Kokkos::strided_slice<int,int,int>, int, Kokkos::full_extent_t>
+    , std::tuple<layout_right_padded<dyn>, Kokkos::layout_stride, Kokkos::dextents<size_t,4>, args_t<10,20,30,40>, Kokkos::dextents<size_t,3>, Kokkos::full_extent_t, int, Kokkos::full_extent_t, Kokkos::full_extent_t>
     // Testing of customization point design
     , std::tuple<Foo::layout_foo, Foo::layout_foo, Kokkos::dextents<size_t,1>, args_t<10>,          Kokkos::dextents<size_t,1>, Kokkos::full_extent_t>
     , std::tuple<Foo::layout_foo, Foo::layout_foo, Kokkos::dextents<size_t,1>, args_t<10>,          Kokkos::dextents<size_t,1>, std::pair<int,int>>

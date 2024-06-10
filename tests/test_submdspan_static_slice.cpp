@@ -508,7 +508,7 @@ TEST(TestMdspan, SubmdspanStaticSlice_Right_i345_TupleFullTuple) {
 
   {
     using expected_extents_type = Kokkos::extents<int, Kokkos::dynamic_extent, 4, Kokkos::dynamic_extent>;
-    using expected_layout_type = Kokkos::Experimental::layout_right_padded<Kokkos::dynamic_extent>;
+    using expected_layout_type = Kokkos::Experimental::layout_right_padded<5>;
     using expected_output_mdspan_type = Kokkos::mdspan<float, expected_extents_type, expected_layout_type>;
 
     auto runTest = [&] (auto sliceSpec0, auto sliceSpec1) {
@@ -522,7 +522,7 @@ TEST(TestMdspan, SubmdspanStaticSlice_Right_i345_TupleFullTuple) {
   }
   {
     using expected_extents_type = Kokkos::extents<int, 2, 4, 3>;
-    using expected_layout_type = Kokkos::Experimental::layout_right_padded<Kokkos::dynamic_extent>;
+    using expected_layout_type = Kokkos::Experimental::layout_right_padded<5>;
     using expected_output_mdspan_type = Kokkos::mdspan<float, expected_extents_type, expected_layout_type>;
 
     auto runTest = [&] (auto sliceSpec0, auto sliceSpec1) {
