@@ -20,6 +20,7 @@
 #include <iostream>
 #include <type_traits>
 #include <vector>
+#include <string> // stoi
 
 // mfh 2022/08/04: This is based on my comments on reference mdspan
 // implementation issue https://github.com/kokkos/mdspan/issues/169.
