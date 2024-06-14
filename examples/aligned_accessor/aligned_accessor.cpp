@@ -28,6 +28,7 @@
 #include <iostream>
 #include <memory>
 #include <type_traits>
+#include <string> // stoi
 
 // mfh 2022/08/08: This is based on my comment on RAPIDS RAFT issue 725:
 // https://github.com/rapidsai/raft/pull/725#discussion_r937991701

@@ -62,6 +62,8 @@ else()
   )
 endif()
 
+# FIXME_MSVC
+if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 mdspan_add_test(
   test_precondition_checks_can_be_disabled
   SOURCE test_alternate_precondition_violation_handler.cpp
@@ -76,6 +78,7 @@ set_tests_properties(
 PROPERTIES
   PASS_REGULAR_EXPRESSION "Failure.*Expected.*throws an exception of type std::logic_error.*Actual.*it throws nothing"
 )
+endif()
 
 if(NOT MDSPAN_ENABLE_CUDA AND NOT MDSPAN_ENABLE_HIP AND NOT MDSPAN_ENABLE_SYCL)
 mdspan_add_test(test_alternate_precondition_violation_handler ENABLE_PRECONDITIONS)
