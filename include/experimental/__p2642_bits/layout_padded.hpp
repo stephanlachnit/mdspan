@@ -221,7 +221,7 @@ public:
 #endif
 
   MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping(const mapping&) noexcept = default;
-  MDSPAN_INLINE_FUNCTION_DEFAULTED mapping& operator=(const mapping&) noexcept = default;
+  MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping& operator=(const mapping&) noexcept = default;
 
   /**
    * Initializes the mapping with the given extents.
@@ -584,7 +584,7 @@ public:
 #endif
 
   MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping(const mapping&) noexcept = default;
-  MDSPAN_INLINE_FUNCTION_DEFAULTED mapping& operator=(const mapping&) noexcept = default;
+  MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping& operator=(const mapping&) noexcept = default;
 
   /**
    * Initializes the mapping with the given extents.

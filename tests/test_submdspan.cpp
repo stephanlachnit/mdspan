@@ -341,10 +341,10 @@ struct TestSubMDSpan<
   }
 
   static void run() {
-    typename mds_org_t::mapping_type map(typename mds_org_t::extents_type(ConstrArgs...));
-    int data[25000];
-    mds_org_t src(data, map);
     size_t* result = allocate_array<size_t>(1);
+    int* data = allocate_array<int>(25000);
+    map_t map{ typename mds_org_t::extents_type(ConstrArgs...) };
+    mds_org_t src(data, map);
 
     dispatch([=] _MDSPAN_HOST_DEVICE () {
       auto sub = Kokkos::submdspan(src, create_slice_arg(SubArgs())...);
@@ -352,6 +352,7 @@ struct TestSubMDSpan<
       result[0] = match?1:0;
     });
     EXPECT_EQ(result[0], 1);
+    free_array(data);
     free_array(result);
   }
 
