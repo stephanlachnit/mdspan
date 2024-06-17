@@ -221,7 +221,7 @@ public:
 #endif
 
   MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping(const mapping&) noexcept = default;
-  MDSPAN_INLINE_FUNCTION_DEFAULTED mapping& operator=(const mapping&) noexcept = default;
+  MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping& operator=(const mapping&) noexcept = default;
 
   /**
    * Initializes the mapping with the given extents.
@@ -497,10 +497,12 @@ public:
 
    // [mdspan.submdspan.mapping], submdspan mapping specialization
    template<class... SliceSpecifiers>
+   MDSPAN_INLINE_FUNCTION
      constexpr auto submdspan_mapping_impl(
        SliceSpecifiers... slices) const;
 
    template<class... SliceSpecifiers>
+   MDSPAN_INLINE_FUNCTION
      friend constexpr auto submdspan_mapping(
        const mapping& src, SliceSpecifiers... slices) {
          return src.submdspan_mapping_impl(slices...);
@@ -582,7 +584,7 @@ public:
 #endif
 
   MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping(const mapping&) noexcept = default;
-  MDSPAN_INLINE_FUNCTION_DEFAULTED mapping& operator=(const mapping&) noexcept = default;
+  MDSPAN_INLINE_FUNCTION_DEFAULTED constexpr mapping& operator=(const mapping&) noexcept = default;
 
   /**
    * Initializes the mapping with the given extents.
@@ -847,6 +849,19 @@ public:
     return !(left == right);
   }
 #endif
+
+   // [mdspan.submdspan.mapping], submdspan mapping specialization
+   template<class... SliceSpecifiers>
+   MDSPAN_INLINE_FUNCTION
+     constexpr auto submdspan_mapping_impl(
+       SliceSpecifiers... slices) const;
+
+   template<class... SliceSpecifiers>
+   MDSPAN_INLINE_FUNCTION
+     friend constexpr auto submdspan_mapping(
+       const mapping& src, SliceSpecifiers... slices) {
+         return src.submdspan_mapping_impl(slices...);
+     }
 };
 }
 }
