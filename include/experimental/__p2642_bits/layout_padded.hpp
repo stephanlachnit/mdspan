@@ -73,7 +73,7 @@ struct static_array_type_for_padded_extent
   using extents_type = _Extents;
   using type = ::MDSPAN_IMPL_STANDARD_NAMESPACE::detail::maybe_static_array<
       index_type, size_t, dynamic_extent,
-      detail::get_actual_static_padding_value<extents_type, padding_value,
+      ::MDSPAN_IMPL_STANDARD_NAMESPACE::MDSPAN_IMPL_PROPOSED_NAMESPACE::detail::get_actual_static_padding_value<extents_type, _PaddingValue,
                                                 _ExtentToPadIdx>()>;
 };
 

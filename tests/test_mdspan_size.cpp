@@ -39,13 +39,14 @@ void test_mdspan_size(std::vector<char>& storage, Extents&& e)
 {
   using extents_type = std::remove_cv_t<std::remove_reference_t<Extents>>;
   using mdspan_t = Kokkos::mdspan<char, extents_type>;
-  const typename mdspan_t::size_type min_storage_size = product_of_extents(e);
+  using size_type = typename mdspan_t::size_type;
+  const size_type min_storage_size = static_cast<size_type>(product_of_extents(e));
   if(storage.size() < min_storage_size) {
     storage.resize(min_storage_size);
   }
   mdspan_t m(storage.data(), std::forward<Extents>(e));
 
-  static_assert(std::is_same<decltype(m.size()), typename mdspan_t::size_type>::value,
+  static_assert(std::is_same<decltype(m.size()), size_type>::value,
 		"The return type of mdspan::size() must be size_type.");
 
   // m.size() must not overflow, as long as the product of extents
