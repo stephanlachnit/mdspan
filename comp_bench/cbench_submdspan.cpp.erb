@@ -3,11 +3,6 @@
 
 int test(int* data) {
   #if defined(METABENCH)
-  auto sub0 = Kokkos::mdspan<int,
-    Kokkos::extents<size_t,
-      <%= (["2"] * n).join(", ") %>
-    >
-  >(data);
   <% (32/n).times do |k| %>
   auto <%= "sub0_#{k}" %> = Kokkos::mdspan<int,
     Kokkos::extents<size_t,
@@ -23,10 +18,13 @@ int test(int* data) {
   <% end %>
   <% end %>
   return 42
-  <% (16/n).times do |k| %>
+  <% (32/n).times do |k| %>
       <%= " + sub#{n}_#{k}" %>()
   <% end %>
   ;
+  #else
+  (void) data;
+  return 1;
   #endif
 }
 
