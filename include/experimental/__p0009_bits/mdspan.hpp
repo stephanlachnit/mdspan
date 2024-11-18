@@ -18,6 +18,7 @@
 
 #include "default_accessor.hpp"
 #include "layout_right.hpp"
+#include "macros.hpp"
 #include "extents.hpp"
 #include "trait_backports.hpp"
 #include "compressed_pair.hpp"
@@ -442,7 +443,7 @@ private:
   MDSPAN_FORCE_INLINE_FUNCTION constexpr mapping_type const& __mapping_ref() const noexcept { return __members.__second().__first(); }
   MDSPAN_FORCE_INLINE_FUNCTION _MDSPAN_CONSTEXPR_14 accessor_type& __accessor_ref() noexcept { return __members.__second().__second(); }
   MDSPAN_FORCE_INLINE_FUNCTION constexpr accessor_type const& __accessor_ref() const noexcept { return __members.__second().__second(); }
-  
+
   MDSPAN_TEMPLATE_REQUIRES(
     class SizeType,
     /* requires */ (
@@ -452,7 +453,7 @@ private:
   )
   MDSPAN_FORCE_INLINE_FUNCTION constexpr bool __is_index_oor(SizeType index, index_type extent) const noexcept {
     // Check for negative indices
-    if constexpr(std::is_signed_v<SizeType>) {
+    if _MDSPAN_IF_CONSTEXPR_17 (_MDSPAN_TRAIT(std::is_signed, SizeType)) {
       if(index < 0) {
         return true;
       }

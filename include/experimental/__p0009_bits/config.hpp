@@ -176,6 +176,13 @@ static_assert(_MDSPAN_CPLUSPLUS >= MDSPAN_CXX_STD_14, "mdspan requires C++14 or 
 #  endif
 #endif
 
+#ifndef _MDSPAN_USE_IF_CONSTEXPR_17
+#  if (defined(__cpp_if_constexpr) && __cpp_if_constexpr >= 201606) \
+        || (!defined(__cpp_constexpr) && MDSPAN_HAS_CXX_17)
+#    define _MDSPAN_USE_IF_CONSTEXPR_17 1
+#  endif
+#endif
+
 #ifndef _MDSPAN_USE_INTEGER_SEQUENCE
 #  if defined(_MDSPAN_COMPILER_MSVC)
 #    if (defined(__cpp_lib_integer_sequence) && __cpp_lib_integer_sequence >= 201304)
